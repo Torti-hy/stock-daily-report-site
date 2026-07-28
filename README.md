@@ -1,84 +1,81 @@
-# 可乐丽每日股票行情展示站
+# 日本股票每日行情展示站
 
-这是一个公开的 GitHub Pages 静态展示仓库，用于归档和展示可乐丽（Kuraray Co., Ltd.，3405.T）每日股票行情截图。网页仅使用 HTML、CSS 和原生 JavaScript，不包含后端服务、用户跟踪或登录功能。
+这是一个公开的 GitHub Pages 静态展示仓库，用于归档和展示可乐丽（Kuraray Co., Ltd.，3405.T）与太阳诱电（TAIYO YUDEN CO., LTD.，6976.T）的每日股票行情截图。网页只使用 HTML、CSS 和原生 JavaScript。
 
 ## 职责边界
 
-- 本网页**不负责抓取行情**，只读取仓库内已经公开的日报图片和索引 JSON。
-- 私人自动化仓库未来只会向本仓库发布公开日报图片（`reports/*.png`）和公开索引（`data/reports.json`）。当前阶段尚未连接任何私人自动化仓库，也未配置 Token 或 Secrets。
-- **不得向本仓库提交**密码、Token、Secrets、Excel 模板、私人日志、diagnostics（诊断信息）或其他私人资料。
+- 网站只读取本仓库内公开的日报图片和索引 JSON，不负责抓取行情。
+- 当前尚未连接私人自动化仓库，也不需要或配置 Token、Secret、Deploy Key 或跨仓库权限。
+- 后续自动发布需要单独设计、审查并配置；本仓库当前不实现跨仓库上传。
+- 不应提交密码、Token、Secrets、私人日志、诊断信息或其他私人资料。
 - 行情展示仅供信息整理，不构成投资建议。
 
 ## 目录结构
 
 ```text
-index.html              # 页面结构
-styles.css              # 响应式样式
-script.js               # JSON 读取、状态渲染与图片弹窗
-data/reports.json       # 公开日报索引
-reports/                # 公开日报 PNG 图片
-assets/empty-report.svg # 本地空状态插图
+index.html                       # 单面板双股票页面结构
+styles.css                       # 响应式样式
+script.js                        # 多股票数据读取、切换、状态渲染与图片弹窗
+data/reports.json                # 公开的多股票日报索引
+reports/kuraray/                 # 可乐丽日报 PNG
+reports/taiyo-yuden/             # 太阳诱电日报 PNG
+assets/empty-report.svg          # 本地空状态插图
 ```
 
-## `reports.json` 格式
+图片必须按股票 slug 隔离，例如 `reports/kuraray/2026-07-28.png` 和 `reports/taiyo-yuden/2026-07-28.png`。当前两个目录只有 `.gitkeep`，没有示例或伪造日报图片。
 
-完整的已发布日报示例：
+## `data/reports.json` 格式
+
+顶层包含索引更新时间和股票数组；每只股票有稳定的 `slug`、中英文名称、ticker、最新记录及历史记录：
 
 ```json
 {
-  "latest": {
-    "date": "2026-07-27",
-    "title": "可乐丽每日股票行情（2026.07.27）",
-    "image": "reports/2026-07-27.png",
-    "updatedAt": "2026-07-27T16:05:00+09:00",
-    "status": "published"
-  },
-  "reports": [
+  "updatedAt": null,
+  "stocks": [
     {
-      "date": "2026-07-27",
-      "title": "可乐丽每日股票行情（2026.07.27）",
-      "image": "reports/2026-07-27.png",
-      "updatedAt": "2026-07-27T16:05:00+09:00",
-      "status": "published"
+      "slug": "kuraray",
+      "name": "可乐丽",
+      "ticker": "3405.T",
+      "companyName": "Kuraray Co., Ltd.",
+      "latest": null,
+      "reports": []
+    },
+    {
+      "slug": "taiyo-yuden",
+      "name": "太阳诱电",
+      "ticker": "6976.T",
+      "companyName": "TAIYO YUDEN CO., LTD.",
+      "latest": null,
+      "reports": []
     }
   ]
 }
 ```
 
-字段说明：
+每个 report 至少支持以下字段：
 
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
-| `latest` | object 或 null | 最新日期状态；无日报时为 `null` |
-| `reports` | array | 历史记录列表；网页会按 `date` 从新到旧排序 |
 | `date` | string | 交易日期，格式为 `YYYY-MM-DD` |
-| `title` | string | 日报标题 |
-| `image` | string | 相对于站点目录的图片路径，例如 `reports/2026-07-27.png` |
-| `updatedAt` | string | ISO 8601 格式的页面更新时间（建议包含时区） |
 | `status` | string | `published`（已发布）或 `market_closed`（休市） |
-| `message` | string | 可选；休市等状态的公开提示语 |
+| `image` | string | 本站相对路径；已发布日报按股票目录存放 |
+| `title` | string | 日报标题 |
+| `updatedAt` | string | ISO 8601 页面更新时间，建议包含时区 |
+| `message` | string | 可选；休市提示 |
 
-休市时，`latest` 可以不含图片：
-
-```json
-{
-  "latest": {
-    "date": "2026-07-28",
-    "status": "market_closed",
-    "message": "今日日本股市休市，暂无可乐丽常规收盘行情更新。"
-  },
-  "reports": []
-}
-```
-
-初始空状态为：
+已发布记录示例：
 
 ```json
 {
-  "latest": null,
-  "reports": []
+  "date": "2026-07-28",
+  "status": "published",
+  "image": "reports/kuraray/2026-07-28.png",
+  "title": "可乐丽每日股票行情（2026.07.28）",
+  "updatedAt": "2026-07-28T16:05:00+09:00"
 }
 ```
+
+页面也临时兼容旧的 `{ "latest": null, "reports": [] }` 结构，并将其视为可乐丽数据；正式索引应始终使用上述多股票结构。当前正式数据保持真实空状态，两只股票的 `latest` 均为 `null`、`reports` 均为空。
 
 ## 本地预览
 
@@ -88,8 +85,8 @@ assets/empty-report.svg # 本地空状态插图
 python3 -m http.server 8000
 ```
 
-然后访问 <http://localhost:8000/>。不要直接双击 `index.html` 测试，因为浏览器可能限制 `file://` 页面通过 `fetch` 读取 JSON。
+访问 <http://localhost:8000/>。不要通过 `file://` 直接打开，因为浏览器可能阻止 `fetch` 读取 JSON。
 
 ## GitHub Pages 部署
 
-GitHub Pages 应配置为从 **`main` 分支根目录（`/`）**部署。页面内所有资源都使用相对路径，以便在 `Torti-hy.github.io/stock-daily-report-site/` 项目子路径中正常加载。
+GitHub Pages 仍应从 **`main` 分支根目录（`/`）**部署。所有 HTML、CSS、JavaScript、JSON、SVG 和日报图片引用均使用相对路径，可在项目子路径中运行。当前没有自动发布连接；未来如需自动发布，必须另行配置并授予经过审查的权限。

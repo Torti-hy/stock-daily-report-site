@@ -1,9 +1,17 @@
 'use strict';
 
 const DATA_URL = 'data/reports.json';
-const STOCK_NAME = '可乐丽（3405.T）';
+const DEFAULT_STOCK_SLUG = 'kuraray';
+const LEGACY_STOCK = {
+  slug: 'kuraray', name: '可乐丽', ticker: '3405.T', companyName: 'Kuraray Co., Ltd.'
+};
 
 const elements = {
+  tabs: [...document.querySelectorAll('[role="tab"][data-stock-slug]')],
+  stockPanel: document.querySelector('#stock-panel'),
+  stockName: document.querySelector('#current-stock-name'),
+  stockTicker: document.querySelector('#current-stock-ticker'),
+  companyName: document.querySelector('#current-company-name'),
   latestStatus: document.querySelector('#latest-status'),
   latestDate: document.querySelector('#latest-date'),
   latestUpdated: document.querySelector('#latest-updated'),
@@ -16,6 +24,8 @@ const elements = {
   modalClose: document.querySelector('#modal-close')
 };
 
+let stocks = [];
+let selectedSlug = DEFAULT_STOCK_SLUG;
 let lastFocusedElement = null;
 
 function safeImagePath(value) {
@@ -42,6 +52,10 @@ function formatUpdatedAt(value) {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit', timeZoneName: 'short'
   }).format(date);
+}
+
+function stockLabel(stock) {
+  return `${stock.name}（${stock.ticker}）`;
 }
 
 function statusText(status) {
@@ -74,7 +88,7 @@ function showLatestEmpty(message, status = '暂无日报', statusClass = '') {
   setLatestStatus(status, statusClass);
 }
 
-function showMarketClosed(report) {
+function showMarketClosed(report, stock) {
   const notice = document.createElement('div');
   notice.className = 'notice-state';
   const heading = document.createElement('strong');
@@ -82,31 +96,28 @@ function showMarketClosed(report) {
   const message = document.createElement('p');
   message.textContent = typeof report.message === 'string' && report.message.trim()
     ? report.message
-    : '今日日本股市休市，暂无可乐丽常规收盘行情更新。';
+    : `今日日本股市休市，暂无${stock.name}常规收盘行情更新。`;
   notice.append(heading, message);
   elements.latestContent.replaceChildren(notice);
   setLatestStatus('休市', 'market-closed');
 }
 
-function createImageButton(report, isLatest = false) {
+function createImageButton(report, stock, isLatest = false) {
   const path = safeImagePath(report.image);
   if (!path) return null;
-
   const container = document.createElement('div');
   const loading = document.createElement('p');
   loading.className = 'image-loading';
   loading.textContent = '图片正在加载…';
   loading.setAttribute('role', 'status');
-
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'report-image-button';
-  button.setAttribute('aria-label', `放大查看${formatDate(report.date)}日报截图`);
+  button.setAttribute('aria-label', `放大查看${stockLabel(stock)}${formatDate(report.date)}日报截图`);
   button.hidden = true;
-
   const image = document.createElement('img');
   image.className = 'report-image';
-  image.alt = `${STOCK_NAME}${formatDate(report.date)}每日股票行情截图`;
+  image.alt = `${stockLabel(stock)}${formatDate(report.date)}每日股票行情截图`;
   image.decoding = 'async';
   image.src = path;
   image.addEventListener('load', () => {
@@ -116,33 +127,30 @@ function createImageButton(report, isLatest = false) {
   });
   image.addEventListener('error', () => {
     button.remove();
-    loading.textContent = '日报图片暂时无法加载，请稍后再试。';
+    loading.textContent = `${stock.name}日报图片暂时无法加载，请稍后再试。`;
     loading.className = 'modal-error';
     if (isLatest) setLatestStatus('图片不可用', 'error');
   });
-  button.addEventListener('click', () => openModal(report));
+  button.addEventListener('click', () => openModal(report, stock));
   button.append(image);
   container.append(loading, button);
   return container;
 }
 
-function renderLatest(report) {
+function renderLatest(report, stock) {
   if (!report || typeof report !== 'object') {
     elements.latestDate.textContent = '—';
     elements.latestUpdated.textContent = '—';
     showLatestEmpty('暂无已发布的日报截图');
     return;
   }
-
   elements.latestDate.textContent = formatDate(report.date);
   elements.latestUpdated.textContent = formatUpdatedAt(report.updatedAt);
-
   if (report.status === 'market_closed') {
-    showMarketClosed(report);
+    showMarketClosed(report, stock);
     return;
   }
-
-  const imageContent = report.status === 'published' ? createImageButton(report, true) : null;
+  const imageContent = report.status === 'published' ? createImageButton(report, stock, true) : null;
   if (!imageContent) {
     showLatestEmpty('暂无已发布的日报截图');
     return;
@@ -151,21 +159,18 @@ function renderLatest(report) {
   setLatestStatus('图片加载中');
 }
 
-function renderHistory(reports) {
+function renderHistory(reports, stock) {
   elements.historyList.replaceChildren();
-  if (!Array.isArray(reports) || reports.length === 0) {
+  const sorted = Array.isArray(reports)
+    ? reports.filter((item) => item && typeof item === 'object').sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')))
+    : [];
+  if (sorted.length === 0) {
     const empty = document.createElement('p');
     empty.className = 'history-empty';
     empty.textContent = '暂无历史日报';
     elements.historyList.append(empty);
     return;
   }
-
-  const sorted = reports.filter((item) => item && typeof item === 'object').sort((a, b) =>
-    String(b.date || '').localeCompare(String(a.date || ''))
-  );
-  if (sorted.length === 0) return renderHistory([]);
-
   sorted.forEach((report) => {
     const item = document.createElement('article');
     item.className = 'history-item';
@@ -175,7 +180,7 @@ function renderHistory(reports) {
     if (typeof report.date === 'string') date.dateTime = report.date;
     const title = document.createElement('span');
     title.className = 'history-title';
-    title.textContent = STOCK_NAME;
+    title.textContent = typeof report.title === 'string' && report.title.trim() ? report.title : stockLabel(stock);
     const status = document.createElement('span');
     status.className = 'history-status';
     status.textContent = `状态：${statusText(report.status)}`;
@@ -185,24 +190,25 @@ function renderHistory(reports) {
     const canView = report.status === 'published' && Boolean(safeImagePath(report.image));
     button.textContent = canView ? '查看日报' : report.status === 'market_closed' ? '当日休市' : '暂无图片';
     button.disabled = !canView;
-    if (canView) button.addEventListener('click', () => openModal(report));
+    if (canView) button.addEventListener('click', () => openModal(report, stock));
     item.append(date, title, status, button);
     elements.historyList.append(item);
   });
 }
 
-function openModal(report) {
+function openModal(report, stock) {
   const path = safeImagePath(report.image);
   if (!path) return;
   lastFocusedElement = document.activeElement;
   elements.modalTitle.textContent = typeof report.title === 'string' && report.title.trim()
-    ? report.title : `${formatDate(report.date)}日报大图`;
+    ? report.title : `${stockLabel(stock)}${formatDate(report.date)}日报大图`;
   elements.modalError.hidden = true;
   elements.modalImage.hidden = true;
-  elements.modalImage.alt = `${STOCK_NAME}${formatDate(report.date)}每日股票行情大图`;
+  elements.modalImage.alt = `${stockLabel(stock)}${formatDate(report.date)}每日股票行情大图`;
   elements.modalImage.onload = () => { elements.modalImage.hidden = false; };
   elements.modalImage.onerror = () => {
     elements.modalImage.hidden = true;
+    elements.modalError.textContent = `${stock.name}日报图片暂时无法加载，请稍后再试。`;
     elements.modalError.hidden = false;
   };
   elements.modalImage.src = path;
@@ -219,14 +225,56 @@ function closeModal() {
   if (lastFocusedElement instanceof HTMLElement) lastFocusedElement.focus();
 }
 
+function renderSelectedStock() {
+  const stock = stocks.find((item) => item.slug === selectedSlug);
+  elements.tabs.forEach((tab) => {
+    const selected = tab.dataset.stockSlug === selectedSlug;
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    if (selected) elements.stockPanel.setAttribute('aria-labelledby', tab.id);
+  });
+  if (!stock) {
+    elements.stockName.textContent = '股票数据不可用';
+    elements.stockTicker.textContent = selectedSlug;
+    elements.companyName.textContent = '该股票未包含在日报索引中';
+    elements.latestDate.textContent = '—';
+    elements.latestUpdated.textContent = '—';
+    showLatestEmpty('该股票的日报信息暂时无法读取。', '数据缺失', 'error');
+    elements.historyList.replaceChildren(buildEmptyState('该股票暂无历史日报信息。'));
+    return;
+  }
+  elements.stockName.textContent = stock.name;
+  elements.stockTicker.textContent = stock.ticker;
+  elements.companyName.textContent = stock.companyName;
+  renderLatest(stock.latest, stock);
+  renderHistory(stock.reports, stock);
+}
+
+function normalizeData(data) {
+  if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Invalid report index');
+  if (Array.isArray(data.stocks)) {
+    return data.stocks.filter((stock) => stock && typeof stock === 'object' && typeof stock.slug === 'string')
+      .map((stock) => ({
+        slug: stock.slug,
+        name: typeof stock.name === 'string' ? stock.name : '名称未提供',
+        ticker: typeof stock.ticker === 'string' ? stock.ticker : 'ticker 未提供',
+        companyName: typeof stock.companyName === 'string' ? stock.companyName : '公司英文名称未提供',
+        latest: stock.latest,
+        reports: stock.reports
+      }));
+  }
+  if (Object.hasOwn(data, 'latest') || Object.hasOwn(data, 'reports')) {
+    return [{ ...LEGACY_STOCK, latest: data.latest, reports: data.reports }];
+  }
+  throw new Error('Invalid report index');
+}
+
 async function loadReports() {
   try {
     const response = await fetch(DATA_URL, { cache: 'no-store' });
     if (!response.ok) throw new Error('Report index request failed');
-    const data = await response.json();
-    if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('Invalid report index');
-    renderLatest(data.latest);
-    renderHistory(data.reports);
+    stocks = normalizeData(await response.json());
+    renderSelectedStock();
   } catch {
     elements.latestDate.textContent = '—';
     elements.latestUpdated.textContent = '—';
@@ -235,6 +283,21 @@ async function loadReports() {
   }
 }
 
+elements.tabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => {
+    selectedSlug = tab.dataset.stockSlug;
+    closeModal();
+    renderSelectedStock();
+  });
+  tab.addEventListener('keydown', (event) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    let targetIndex = event.key === 'Home' ? 0 : event.key === 'End' ? elements.tabs.length - 1 : index + (event.key === 'ArrowRight' ? 1 : -1);
+    targetIndex = (targetIndex + elements.tabs.length) % elements.tabs.length;
+    elements.tabs[targetIndex].click();
+    elements.tabs[targetIndex].focus();
+  });
+});
 elements.modalClose.addEventListener('click', closeModal);
 elements.modal.querySelector('[data-close-modal]').addEventListener('click', closeModal);
 document.addEventListener('keydown', (event) => {

@@ -1,4 +1,21 @@
 {
-  "latest": null,
-  "reports": []
+  "updatedAt": null,
+  "stocks": [
+    {
+      "slug": "kuraray",
+      "name": "可乐丽",
+      "ticker": "3405.T",
+      "companyName": "Kuraray Co., Ltd.",
+      "latest": null,
+      "reports": []
+    },
+    {
+      "slug": "taiyo-yuden",
+      "name": "太阳诱电",
+      "ticker": "6976.T",
+      "companyName": "TAIYO YUDEN CO., LTD.",
+      "latest": null,
+      "reports": []
+    }
+  ]
 }
