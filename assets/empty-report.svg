@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-labelledby="title desc">
+  <title id="title">暂无日报</title>
+  <desc id="desc">一张带有折线图轮廓的空白报告插图</desc>
+  <rect width="320" height="180" rx="16" fill="#f3f6f8"/>
+  <rect x="57" y="35" width="206" height="111" rx="10" fill="#fff" stroke="#cbd5dc" stroke-width="2"/>
+  <path d="M81 119h158M91 105l34-25 31 15 37-38 36 20" fill="none" stroke="#71818c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="125" cy="80" r="5" fill="#246a73"/><circle cx="156" cy="95" r="5" fill="#246a73"/><circle cx="193" cy="57" r="5" fill="#246a73"/>
+</svg>

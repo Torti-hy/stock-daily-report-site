@@ -1,0 +1,85 @@
+:root {
+  color-scheme: light;
+  --ink: #182126;
+  --muted: #58666f;
+  --line: #d7dfe3;
+  --surface: #ffffff;
+  --background: #f4f6f7;
+  --accent: #17636c;
+  --accent-soft: #e7f1f2;
+  --warning: #765615;
+  --warning-soft: #fff5d9;
+  --danger: #8a2f2f;
+  --danger-soft: #fbeaea;
+  --shadow: 0 12px 30px rgba(20, 38, 46, 0.08);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--background); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif; line-height: 1.65; }
+button, a { font: inherit; }
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 3px solid #e49b20; outline-offset: 3px; }
+.container { width: min(1080px, calc(100% - 40px)); margin-inline: auto; }
+.skip-link { position: fixed; top: 10px; left: 10px; z-index: 100; padding: 8px 14px; background: var(--ink); color: white; transform: translateY(-150%); }
+.skip-link:focus { transform: translateY(0); }
+.site-header { padding: 70px 0 56px; background: var(--surface); border-bottom: 1px solid var(--line); text-align: center; }
+.eyebrow, .section-label { margin: 0 0 8px; color: var(--accent); font-size: .76rem; font-weight: 750; letter-spacing: .14em; }
+h1 { margin: 0; font-size: clamp(2rem, 6vw, 3.25rem); line-height: 1.2; letter-spacing: .02em; }
+.subtitle { margin: 10px 0 0; color: var(--muted); font-size: 1.1rem; }
+.intro { max-width: 630px; margin: 22px auto 0; color: var(--muted); }
+main.container { padding-block: 42px 56px; }
+.panel { padding: clamp(22px, 4vw, 38px); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
+.panel + .panel { margin-top: 28px; }
+.section-heading { display: flex; align-items: start; justify-content: space-between; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+h2 { margin: 0; font-size: clamp(1.35rem, 3vw, 1.75rem); line-height: 1.3; }
+.status-badge { display: inline-flex; flex-shrink: 0; align-items: center; min-height: 30px; padding: 3px 12px; border-radius: 99px; background: #edf1f3; color: #43515a; font-size: .84rem; font-weight: 700; }
+.status-badge.published { background: var(--accent-soft); color: #12545c; }
+.status-badge.market-closed { background: var(--warning-soft); color: var(--warning); }
+.status-badge.error { background: var(--danger-soft); color: var(--danger); }
+.report-meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 24px 0; }
+.report-meta div { padding: 12px 15px; background: #f7f9fa; border-radius: 8px; }
+.report-meta dt { color: var(--muted); font-size: .78rem; }
+.report-meta dd { margin: 2px 0 0; font-weight: 650; }
+.empty-state, .notice-state { display: grid; justify-items: center; padding: 34px 18px; border: 1px dashed #b9c5cb; border-radius: 10px; background: #fafbfb; text-align: center; }
+.empty-state img { width: min(260px, 75%); height: auto; margin-bottom: 12px; }
+.empty-state p, .notice-state p { margin: 0; color: var(--muted); }
+.notice-state strong { margin-bottom: 6px; color: var(--warning); font-size: 1.1rem; }
+.report-image-button { display: block; width: 100%; padding: 0; background: none; border: 0; border-radius: 8px; cursor: zoom-in; }
+.report-image { display: block; width: auto; max-width: 100%; height: auto; margin-inline: auto; border: 1px solid #b8c3c9; border-radius: 8px; box-shadow: 0 8px 24px rgba(20, 38, 46, .12); }
+.image-loading { margin: 0 0 10px; color: var(--muted); text-align: center; }
+.history-list { display: grid; gap: 14px; margin-top: 22px; }
+.loading-text, .history-empty { margin: 0; padding: 25px; color: var(--muted); background: #f7f9fa; border-radius: 8px; text-align: center; }
+.history-item { display: grid; grid-template-columns: minmax(110px, .8fr) minmax(180px, 1.5fr) auto auto; align-items: center; gap: 14px; padding: 16px; border: 1px solid var(--line); border-radius: 9px; }
+.history-date { font-weight: 750; }
+.history-title { color: var(--muted); }
+.history-status { font-size: .84rem; font-weight: 700; }
+.view-button, .close-button { padding: 8px 14px; border: 1px solid var(--accent); border-radius: 6px; background: var(--surface); color: var(--accent); font-weight: 700; cursor: pointer; }
+.view-button:hover, .close-button:hover { background: var(--accent-soft); }
+.view-button:disabled { cursor: not-allowed; opacity: .55; }
+.site-footer { padding: 34px 0; background: #202b31; color: #edf2f4; font-size: .9rem; }
+.site-footer p { margin: 5px 0; }
+.modal[hidden] { display: none; }
+.modal { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 24px; }
+.modal-backdrop { position: absolute; inset: 0; background: rgba(9, 15, 18, .82); }
+.modal-dialog { position: relative; display: flex; flex-direction: column; width: min(1200px, 100%); max-height: calc(100vh - 48px); background: var(--surface); border-radius: 10px; overflow: hidden; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.modal-header h2 { font-size: 1.05rem; }
+.modal-image-wrap { padding: 18px; overflow: auto; overscroll-behavior: contain; }
+.modal-image-wrap img { display: block; width: auto; max-width: 100%; height: auto; margin-inline: auto; }
+.modal-error { padding: 35px; color: var(--danger); text-align: center; }
+body.modal-open { overflow: hidden; }
+
+@media (max-width: 700px) {
+  .container { width: min(100% - 24px, 1080px); }
+  .site-header { padding: 48px 0 40px; }
+  main.container { padding-block: 24px 36px; }
+  .panel { padding: 20px 16px; border-radius: 10px; }
+  .report-meta { grid-template-columns: 1fr; }
+  .history-item { grid-template-columns: 1fr auto; gap: 6px 12px; }
+  .history-title { grid-column: 1 / -1; }
+  .history-status { grid-column: 1; }
+  .view-button { grid-column: 2; grid-row: 1 / span 3; }
+  .modal { align-items: stretch; padding: 0; }
+  .modal-dialog { width: 100%; max-height: 100vh; border-radius: 0; }
+  .modal-image-wrap { padding: 12px; }
+}

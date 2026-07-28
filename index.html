@@ -1,12 +1,80 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="可乐丽（3405.T）每日股票行情截图归档。">
   <title>可乐丽每日股票行情</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <h1>可乐丽每日股票行情</h1>
-  <p>网站已成功创建，后续将在这里展示每日股票行情截图。</p>
+  <a class="skip-link" href="#main-content">跳至主要内容</a>
+  <header class="site-header">
+    <div class="container">
+      <p class="eyebrow">DAILY MARKET REPORT</p>
+      <h1>可乐丽每日股票行情</h1>
+      <p class="subtitle">Kuraray Co., Ltd.（3405.T）</p>
+      <p class="intro">每日日本股市收盘后更新，仅供信息整理与内部参考。</p>
+    </div>
+  </header>
+
+  <main id="main-content" class="container" tabindex="-1">
+    <section class="panel latest-section" aria-labelledby="latest-heading">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">DAILY REPORT</p>
+          <h2 id="latest-heading">最新日报</h2>
+        </div>
+        <span id="latest-status" class="status-badge" aria-live="polite">正在读取</span>
+      </div>
+
+      <dl class="report-meta">
+        <div><dt>交易日期</dt><dd id="latest-date">—</dd></div>
+        <div><dt>页面更新时间</dt><dd id="latest-updated">—</dd></div>
+      </dl>
+
+      <div id="latest-content" class="latest-content" aria-live="polite">
+        <div class="empty-state">
+          <img src="assets/empty-report.svg" alt="暂无日报的空状态插图" width="320" height="180">
+          <p>正在加载日报信息…</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel history-section" aria-labelledby="history-heading">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">ARCHIVE</p>
+          <h2 id="history-heading">历史日报</h2>
+        </div>
+      </div>
+      <div id="history-list" class="history-list" aria-live="polite">
+        <p class="loading-text">正在读取历史日报…</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p><strong>数据来源：</strong>Yahoo!ファイナンス日本站公开行情</p>
+      <p><strong>风险提示：</strong>本页面仅用于公开行情信息整理，不构成任何投资建议。市场有风险，投资需谨慎。</p>
+      <p>本站不提供交易、开户、荐股或投资咨询服务。</p>
+    </div>
+  </footer>
+
+  <div id="image-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 id="modal-title">日报大图</h2>
+        <button id="modal-close" class="close-button" type="button" aria-label="关闭日报大图">关闭</button>
+      </div>
+      <div class="modal-image-wrap">
+        <img id="modal-image" src="assets/empty-report.svg" alt="" hidden>
+        <p id="modal-error" class="modal-error" hidden>图片暂时无法加载，请稍后再试。</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
