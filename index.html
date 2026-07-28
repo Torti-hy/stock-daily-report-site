@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="可乐丽（3405.T）每日股票行情截图归档。">
-  <title>可乐丽每日股票行情</title>
+  <meta name="description" content="可乐丽（3405.T）与太阳诱电（6976.T）每日股票行情截图归档。">
+  <title>日本股票每日行情</title>
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -13,14 +13,28 @@
   <header class="site-header">
     <div class="container">
       <p class="eyebrow">DAILY MARKET REPORT</p>
-      <h1>可乐丽每日股票行情</h1>
-      <p class="subtitle">Kuraray Co., Ltd.（3405.T）</p>
+      <h1>日本股票每日行情</h1>
+      <p class="subtitle">可乐丽（3405.T）与太阳诱电（6976.T）</p>
       <p class="intro">每日日本股市收盘后更新，仅供信息整理与内部参考。</p>
     </div>
   </header>
 
   <main id="main-content" class="container" tabindex="-1">
-    <section class="panel latest-section" aria-labelledby="latest-heading">
+    <nav class="stock-switcher" aria-label="选择股票">
+      <div class="stock-tabs" role="tablist" aria-label="日报股票">
+        <button id="tab-kuraray" class="stock-tab" type="button" role="tab" aria-selected="true" aria-controls="stock-panel" data-stock-slug="kuraray">可乐丽 <span>3405.T</span></button>
+        <button id="tab-taiyo-yuden" class="stock-tab" type="button" role="tab" aria-selected="false" aria-controls="stock-panel" data-stock-slug="taiyo-yuden" tabindex="-1">太阳诱电 <span>6976.T</span></button>
+      </div>
+    </nav>
+
+    <div id="stock-panel" role="tabpanel" aria-labelledby="tab-kuraray">
+      <div class="current-stock" aria-live="polite">
+        <p class="section-label">SELECTED STOCK</p>
+        <p><strong id="current-stock-name">可乐丽</strong><span id="current-stock-ticker">3405.T</span></p>
+        <p id="current-company-name" class="company-name">Kuraray Co., Ltd.</p>
+      </div>
+
+      <section class="panel latest-section" aria-labelledby="latest-heading">
       <div class="section-heading">
         <div>
           <p class="section-label">DAILY REPORT</p>
@@ -40,9 +54,9 @@
           <p>正在加载日报信息…</p>
         </div>
       </div>
-    </section>
+      </section>
 
-    <section class="panel history-section" aria-labelledby="history-heading">
+      <section class="panel history-section" aria-labelledby="history-heading">
       <div class="section-heading">
         <div>
           <p class="section-label">ARCHIVE</p>
@@ -52,7 +66,8 @@
       <div id="history-list" class="history-list" aria-live="polite">
         <p class="loading-text">正在读取历史日报…</p>
       </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <footer class="site-footer">

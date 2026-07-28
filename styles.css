@@ -28,6 +28,18 @@ h1 { margin: 0; font-size: clamp(2rem, 6vw, 3.25rem); line-height: 1.2; letter-s
 .subtitle { margin: 10px 0 0; color: var(--muted); font-size: 1.1rem; }
 .intro { max-width: 630px; margin: 22px auto 0; color: var(--muted); }
 main.container { padding-block: 42px 56px; }
+.stock-switcher { margin-bottom: 20px; }
+.stock-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.stock-tab { padding: 14px 18px; border: 1px solid #9dabb2; border-radius: 9px; background: var(--surface); color: #35434b; font-weight: 750; cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.stock-tab span { margin-left: 6px; font-size: .86rem; font-weight: 650; }
+.stock-tab:hover { border-color: var(--accent); background: #f4f9f9; }
+.stock-tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: white; box-shadow: 0 5px 16px rgba(23, 99, 108, .2); }
+.current-stock { margin-bottom: 20px; padding: 18px 22px; border-left: 4px solid var(--accent); background: var(--surface); box-shadow: var(--shadow); }
+.current-stock .section-label { margin-bottom: 3px; }
+.current-stock p { margin: 0; }
+.current-stock strong { font-size: 1.35rem; }
+.current-stock strong + span { margin-left: 10px; color: var(--muted); font-weight: 700; }
+.current-stock .company-name { color: var(--muted); font-size: .9rem; }
 .panel { padding: clamp(22px, 4vw, 38px); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); }
 .panel + .panel { margin-top: 28px; }
 .section-heading { display: flex; align-items: start; justify-content: space-between; gap: 18px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
@@ -72,6 +84,9 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 700px) {
   .container { width: min(100% - 24px, 1080px); }
   .site-header { padding: 48px 0 40px; }
+  .stock-tabs { gap: 8px; }
+  .stock-tab { display: grid; gap: 2px; padding: 11px 8px; }
+  .stock-tab span { margin-left: 0; }
   main.container { padding-block: 24px 36px; }
   .panel { padding: 20px 16px; border-radius: 10px; }
   .report-meta { grid-template-columns: 1fr; }
