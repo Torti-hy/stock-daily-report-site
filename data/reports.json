@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-05T17:28:19+09:00",
+  "updatedAt": "2026-08-05T19:06:00+09:00",
   "stocks": [
     {
       "slug": "kuraray",
@@ -11,7 +11,7 @@
         "status": "published",
         "image": "reports/kuraray/2026-08-05.png",
         "title": "可乐丽每日股票行情（2026.08.05）",
-        "updatedAt": "2026-08-05T17:28:19+09:00"
+        "updatedAt": "2026-08-05T19:06:00+09:00"
       },
       "reports": [
         {
@@ -19,7 +19,7 @@
           "status": "published",
           "image": "reports/kuraray/2026-08-05.png",
           "title": "可乐丽每日股票行情（2026.08.05）",
-          "updatedAt": "2026-08-05T17:28:19+09:00"
+          "updatedAt": "2026-08-05T19:06:00+09:00"
         },
         {
           "date": "2026-08-04",
@@ -75,7 +75,7 @@
         "status": "published",
         "image": "reports/taiyo-yuden/2026-08-05.png",
         "title": "太阳诱电每日股票行情（2026.08.05）",
-        "updatedAt": "2026-08-05T17:28:19+09:00"
+        "updatedAt": "2026-08-05T19:06:00+09:00"
       },
       "reports": [
         {
@@ -83,7 +83,7 @@
           "status": "published",
           "image": "reports/taiyo-yuden/2026-08-05.png",
           "title": "太阳诱电每日股票行情（2026.08.05）",
-          "updatedAt": "2026-08-05T17:28:19+09:00"
+          "updatedAt": "2026-08-05T19:06:00+09:00"
         },
         {
           "date": "2026-08-04",
