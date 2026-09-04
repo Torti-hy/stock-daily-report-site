@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-03T21:19:28+09:00",
+  "updatedAt": "2026-09-04T18:00:16+09:00",
   "stocks": [
     {
       "slug": "kuraray",
@@ -7,13 +7,20 @@
       "ticker": "3405.T",
       "companyName": "Kuraray Co., Ltd.",
       "latest": {
-        "date": "2026-09-03",
+        "date": "2026-09-04",
         "status": "published",
-        "image": "reports/kuraray/2026-09-03.png",
-        "title": "可乐丽每日股票行情（2026.09.03）",
-        "updatedAt": "2026-09-03T21:19:28+09:00"
+        "image": "reports/kuraray/2026-09-04.png",
+        "title": "可乐丽每日股票行情（2026.09.04）",
+        "updatedAt": "2026-09-04T18:00:16+09:00"
       },
       "reports": [
+        {
+          "date": "2026-09-04",
+          "status": "published",
+          "image": "reports/kuraray/2026-09-04.png",
+          "title": "可乐丽每日股票行情（2026.09.04）",
+          "updatedAt": "2026-09-04T18:00:16+09:00"
+        },
         {
           "date": "2026-09-03",
           "status": "published",
@@ -197,13 +204,20 @@
       "ticker": "6976.T",
       "companyName": "TAIYO YUDEN CO., LTD.",
       "latest": {
-        "date": "2026-09-03",
+        "date": "2026-09-04",
         "status": "published",
-        "image": "reports/taiyo-yuden/2026-09-03.png",
-        "title": "太阳诱电每日股票行情（2026.09.03）",
-        "updatedAt": "2026-09-03T21:19:28+09:00"
+        "image": "reports/taiyo-yuden/2026-09-04.png",
+        "title": "太阳诱电每日股票行情（2026.09.04）",
+        "updatedAt": "2026-09-04T18:00:16+09:00"
       },
       "reports": [
+        {
+          "date": "2026-09-04",
+          "status": "published",
+          "image": "reports/taiyo-yuden/2026-09-04.png",
+          "title": "太阳诱电每日股票行情（2026.09.04）",
+          "updatedAt": "2026-09-04T18:00:16+09:00"
+        },
         {
           "date": "2026-09-03",
           "status": "published",
